@@ -3,20 +3,28 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Agenda de Pablo y Álvaro</title>
+<title>Familia</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="icon" href="icon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-title" content="Familia">
+<meta name="theme-color" content="#ffffff">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  /* Minimalista: blanco y negro; solo Papá (rojo) y Mamá (verde) llevan color. Cada pestaña: resumen → formulario → lista. */
+  /* Minimalista: blanco y negro; solo Papá (azul grisáceo) y Mamá (terracota) llevan color, apagados pero distinguibles. */
   --bg:#ffffff;
   --ink:#0b0b0b;
   --muted:#6d6d6d;
   --line:#e4e4e4;
   --soft:#f4f4f4;
-  --papa:#d62828;
-  --mama:#15803d;
+  --papa:#6a8caf;
+  --mama:#c08a6b;
+  --papa-suave:rgba(106,140,175,.20);
+  --mama-suave:rgba(192,138,107,.22);
   --f-body:'Geist', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   --f-mono:'Geist Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
   color-scheme: light;
@@ -96,7 +104,8 @@ input[type=text],input[type=date],input[type=time],input[type=number],input:not(
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ink)}
 textarea{resize:vertical;min-height:96px;line-height:1.45}
 select{appearance:none;-webkit-appearance:none;padding-right:34px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%230b0b0b' stroke-width='1.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+input[type=date]{min-width:0;max-width:100%;-webkit-appearance:none;appearance:none}
 .inline{display:flex;align-items:center;gap:10px}
 .inline input{max-width:110px}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
@@ -126,6 +135,7 @@ details.tool>summary .muted{font-weight:400;font-size:13px}
 details.tool>.form{padding:4px 16px 18px}
 
 .layout{display:grid;gap:28px}
+.layout>*,main.wrap>section>*{min-width:0}
 @media (min-width:880px){.layout{grid-template-columns:minmax(300px,380px) 1fr;align-items:start}.layout>.side{position:sticky;top:64px}}
 .panel{border:1px solid var(--line);border-radius:12px;padding:18px}
 .panel h3{margin:0 0 14px;font-size:15px;font-weight:600}
@@ -133,7 +143,7 @@ details.tool>.form{padding:4px 16px 18px}
 
 /* Calendario */
 .cal-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px;margin-bottom:16px}
-.yearnav{display:flex;align-items:center;gap:6px}
+.yearnav{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .yearnav .h2{min-width:3.4ch;text-align:center}
 .icon{width:36px;height:36px;border:1px solid var(--line);background:var(--bg);border-radius:8px;font-size:18px;line-height:1;display:grid;place-items:center}
 .icon:hover{border-color:var(--ink)}
@@ -165,7 +175,7 @@ details.tool>.form{padding:4px 16px 18px}
 @media (max-width:600px){.d{font-size:15px}.months{gap:28px}}
 
 .palette{position:sticky;bottom:12px;z-index:15;margin-top:28px;background:var(--bg);border:1px solid var(--ink);border-radius:14px;padding:10px 12px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;box-shadow:0 6px 24px rgba(0,0,0,.08)}
-.brushes{display:flex;gap:6px}
+.brushes{display:flex;flex-wrap:wrap;gap:6px}
 .brush{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:7px 11px;font-size:14px;font-weight:500}
 .brush[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
 .sw{width:14px;height:14px;border-radius:4px;display:inline-block;border:1px solid transparent}
@@ -191,7 +201,8 @@ details.tool>.form{padding:4px 16px 18px}
 .row-meta{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:2px}
 .row-amt{text-align:right}
 .row-amt .num{font-weight:600}
-.row-eff{font-size:12px;color:var(--muted);white-space:nowrap}
+.row-eff{font-size:12px;color:var(--muted);white-space:normal;max-width:16ch;margin-left:auto}
+.row-amt .num{white-space:nowrap}
 .row-tools{grid-column:2/-1;display:flex;justify-content:flex-end}
 @media (min-width:600px){.row{grid-template-columns:60px 1fr auto auto}.row-tools{grid-column:auto;padding-top:1px}}
 .list-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap}
@@ -247,7 +258,125 @@ details.tool>.form{padding:4px 16px 18px}
 .to-top{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:30;width:46px;height:46px;border-radius:50%;border:0;background:var(--ink);color:var(--bg);display:grid;place-items:center;box-shadow:0 6px 20px rgba(0,0,0,.18);padding:0}
 .to-top:hover{opacity:.88}
 .to-top svg{width:20px;height:20px}
-#y-label{font-size:20px;min-width:0}
+#y-label{font-size:17px;min-width:0;white-space:nowrap}
+.brush{padding:6px 9px}
+.palette{padding:8px 10px;gap:6px 10px}
+.palette .hint{flex-basis:100%;order:4}
+#cal-done{order:3}
+.brushes{gap:4px}
+.brush{padding:6px 7px;gap:5px;font-size:13px}
+.palette .seg button{padding:6px 11px}
+.d{position:relative}
+.d.ev::after{content:"";position:absolute;bottom:3px;left:50%;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--ink)}
+.d.papa.ev::after,.d.mama.ev::after{background:#fff}
+.d.req{outline:2px dotted var(--ink);outline-offset:-3px}
+.group-h{display:flex;justify-content:space-between;gap:12px}
+.group-h .num{letter-spacing:0;text-transform:none;font-size:13px;color:var(--ink)}
+.row-tools{gap:14px}
+.req-card{border:1px solid var(--ink);border-radius:12px;padding:12px 14px;margin-bottom:10px;display:grid;gap:8px;font-size:14px}
+.req-card p{margin:0;color:var(--muted)}
+.req-card .req-t{display:flex;gap:8px;align-items:baseline}
+.req-card .req-t .dot{transform:translateY(1px)}
+.req-done{font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;margin:0 0 6px}
+#cambios{margin-bottom:18px}
+#cambios:empty{display:none}
+#cambio-tool{margin-bottom:22px}
+.evline{margin:0;border:1px dashed var(--ink);border-radius:10px;padding:8px 11px;font-size:14px;display:grid;gap:2px}
+.evline b{font-weight:600}
+.evline span{font-size:12px;color:var(--muted)}
+.hoy h4{margin:12px 0 6px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.hoy li.ev b::before{content:"★ ";font-weight:400}
+.badge{display:inline-block;min-width:18px;height:18px;line-height:18px;border-radius:999px;background:var(--ink);color:var(--bg);font-size:11px;font-weight:600;text-align:center;padding:0 5px;margin-left:6px;vertical-align:1px}
+.hoy{margin-bottom:20px;padding:14px 16px}
+.hoy h3{margin:0 0 10px}
+.hoy ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.hoy li{display:grid;grid-template-columns:auto auto 1fr;gap:8px;align-items:baseline;font-size:14px}
+.hoy li .num{font-size:13px;font-weight:600}
+.hoy li .dot{transform:translateY(-1px)}
+.hoy .links{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:12px;padding-top:10px;border-top:1px solid var(--line);font-size:13px}
+.hoy .links a{color:var(--ink);text-underline-offset:3px}
+.weeknav{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.weeknav #wk-label{font-weight:600;font-size:15px;min-width:0}
+.weeknav #wk-label small{font-weight:400;color:var(--muted);font-size:13px;margin-left:6px}
+
+/* Ronda 3: Ver / Editar, colores suaves, fichas, horario con franja a la derecha */
+.cal-head .modo button{padding:7px 16px;font-size:14px}
+.editbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:-4px 0 16px;padding:10px 12px;border:1px solid var(--ink);border-radius:12px}
+.editbar p{margin:0;font-size:13px}
+.editbar .seg{display:flex;width:100%;max-width:520px}
+.editbar .seg button{flex:1;padding:8px 10px;line-height:1.25}
+#cal-stats{margin-bottom:16px}
+.months .d.papa{background:var(--papa-suave);color:var(--ink);box-shadow:inset 0 0 6px var(--papa-suave)}
+.months .d.mama{background:var(--mama-suave);color:var(--ink);box-shadow:inset 0 0 6px var(--mama-suave)}
+.months .d.papa.today,.months .d.mama.today{box-shadow:inset 0 0 0 2px var(--ink);color:var(--ink)}
+.months .d.papa.ev::after,.months .d.mama.ev::after{background:var(--ink)}
+.months.full .d.papa{background:var(--papa);color:#fff;box-shadow:none}
+.months.full .d.mama{background:var(--mama);color:#fff;box-shadow:none}
+.months.full .d.papa.today,.months.full .d.mama.today{box-shadow:inset 0 0 0 2px var(--ink),inset 0 0 0 4px #fff;color:#fff}
+.months.full .d.papa.ev::after,.months.full .d.mama.ev::after{background:#fff}
+.d.ev::after{width:6px;height:6px;margin-left:-3px;bottom:2px}
+.month h3 .mlist{border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:3px 8px;font-size:12px;font-weight:500;display:inline-flex;align-items:center;gap:5px;color:var(--ink)}
+.month h3 .mlist:hover{border-color:var(--ink)}
+.month h3 .mlist b{font-family:var(--f-mono);font-weight:600}
+.month h3 .mright{display:inline-flex;align-items:center;gap:10px}
+.sheet{position:fixed;top:0;right:0;bottom:0;left:0;z-index:60;background:rgba(11,11,11,.35);display:flex;align-items:flex-end;justify-content:center;padding:0}
+@media (min-width:640px){.sheet{align-items:center;padding:24px}}
+.sheet-box{background:var(--bg);width:100%;max-width:480px;max-height:88vh;overflow-y:auto;border-radius:16px 16px 0 0;padding:16px 18px 22px;display:grid;gap:12px;align-content:start}
+@media (min-width:640px){.sheet-box{border-radius:16px}}
+.sheet-h{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.sheet-h h3{margin:0;font-size:18px;font-weight:600}
+.sheet h4{margin:4px 0 0;font-size:14px;font-weight:600}
+.dia-who{margin:0;display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted)}
+.dia-who b{color:var(--ink)}
+.evitem{display:grid;grid-template-columns:86px 1fr auto;gap:2px 10px;padding:10px 0;border-top:1px solid var(--line);align-items:start}
+.evitem .t{font-family:var(--f-mono);font-size:13px;font-weight:600;padding-top:1px}
+.evitem .x{font-size:13px;color:var(--muted)}
+.evitem b{font-weight:600}
+.evitem .tools{display:flex;gap:12px}
+.evday{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:14px 0 4px;display:flex;align-items:center;gap:6px}
+.evday:first-child{padding-top:0}
+.evitem.link{cursor:pointer}
+.evitem.link:hover b{text-decoration:underline;text-underline-offset:3px}
+.wa-btn{width:100%;margin-bottom:18px;padding:12px 16px}
+.res-mes{font-weight:600}
+.res-txt{margin:0;white-space:pre-wrap;font-family:var(--f-mono);font-size:13px;line-height:1.5;background:var(--soft);border-radius:10px;padding:12px 14px;max-height:46vh;overflow-y:auto}
+.hijos-sel button{padding:9px 18px;font-size:15px;font-weight:600}
+.dbody{display:grid;gap:8px;align-items:stretch}
+.dbody.has-ev{grid-template-columns:minmax(0,1fr) minmax(0,40%)}
+.dleft{display:grid;gap:8px;align-content:start}
+.dright{display:flex;flex-direction:column;gap:6px}
+.evs{width:100%;text-align:left;border:0;background:var(--soft);border-radius:8px;padding:7px 8px;display:grid;gap:2px;font-size:12px;line-height:1.3;overflow-wrap:anywhere}
+.evs:hover{background:#ebebeb}
+.evs b{font-size:13px;font-weight:600}
+.evs .t{font-family:var(--f-mono);font-weight:600}
+.evs .k{color:var(--muted)}
+.evs.todo{flex:1;min-height:84px;align-content:start;background:repeating-linear-gradient(135deg,var(--soft) 0 8px,#ececec 8px 16px)}
+
+.act{border:0;border-radius:12px}
+.act:hover{filter:brightness(.96)}
+.d.ev::after{content:none}
+.d .ek{position:absolute;left:0;right:0;bottom:2px;font-family:var(--f-mono);font-size:11px;font-weight:700;line-height:1;letter-spacing:1px;text-align:center;color:var(--ink)}
+.months.full .d.papa .ek,.months.full .d.mama .ek{color:#fff}
+.d.ev{padding-bottom:11px}
+.d .ek{bottom:3px}
+.ek-leg b{display:inline-grid;place-items:center;min-width:16px;height:16px;border:1px solid var(--ink);border-radius:4px;font-family:var(--f-mono);font-size:10px;margin:0 2px 0 6px}
+
+.row-meta{display:block}
+.row-meta .dot,.row-meta .kidtag{display:inline-block;vertical-align:-1px;margin-right:6px}
+.row-meta .kidtag{text-align:center;line-height:14px;vertical-align:0}
+.hijos-deben{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);display:grid;gap:8px}
+.hijos-deben h4{margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.hd-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 12px;font-size:14px}
+.hd-row span{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap}
+.kidtag{display:inline-grid;place-items:center;width:16px;height:16px;border:1px solid var(--ink);border-radius:4px;font-family:var(--f-mono);font-size:10px;font-weight:700;color:var(--ink)}
+
+.me-wrap{gap:6px}
+.letra{display:inline-flex;align-items:flex-end;gap:2px;border:1px solid var(--line);border-radius:8px;padding:3px}
+.letra button{border:0;background:none;border-radius:5px;padding:3px 6px;line-height:1;font-weight:600;color:var(--muted);min-width:26px;min-height:26px;display:grid;place-items:end center}
+.letra button[data-letra="1"]{font-size:12px}
+.letra button[data-letra="2"]{font-size:15px}
+.letra button[data-letra="3"]{font-size:18px}
+.letra button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
 @media (prefers-reduced-motion:reduce){*{transition:none !important;scroll-behavior:auto !important}}
 </style>
 </head>
@@ -255,16 +384,14 @@ details.tool>.form{padding:4px 16px 18px}
 <header class="wrap head">
   <div class="head-row">
     <div>
-      <h1 class="brand">Pablo y Álvaro</h1>
+      <h1 class="brand">Familia</h1>
       <p class="today" id="today"><span class="dot"></span><span>Cargando el calendario…</span></p>
     </div>
     <div class="me-wrap">
-      <div class="me" role="group" aria-label="Quién usa la app en este dispositivo">
-        <span>Soy</span>
-        <div class="seg">
-          <button type="button" data-me="papa" aria-pressed="false">Papá</button>
-          <button type="button" data-me="mama" aria-pressed="false">Mamá</button>
-        </div>
+      <div class="letra" role="group" aria-label="Tamaño de letra">
+        <button type="button" data-letra="1" aria-label="Letra pequeña" aria-pressed="true">A</button>
+        <button type="button" data-letra="2" aria-label="Letra mediana" aria-pressed="false">A</button>
+        <button type="button" data-letra="3" aria-label="Letra grande" aria-pressed="false">A</button>
       </div>
       <button type="button" class="link-btn" id="salir">Salir</button>
     </div>
@@ -273,9 +400,8 @@ details.tool>.form{padding:4px 16px 18px}
 
 <nav class="tabs-bar" aria-label="Secciones">
   <div class="wrap tabs">
-    <a href="#calendario" data-tab="calendario">Calendario</a>
+    <a href="#calendario" data-tab="calendario">Calendario<span class="badge" id="cal-badge" hidden></span></a>
     <a href="#cuentas" data-tab="cuentas">Cuentas</a>
-    <a href="#notas" data-tab="notas">Notas</a>
     <a href="#horario" data-tab="horario">Horario</a>
     <span class="status" id="status">Conectando…</span>
   </div>
@@ -295,6 +421,8 @@ details.tool>.form{padding:4px 16px 18px}
 
   <!-- CALENDARIO -->
   <section id="tab-calendario" class="tab" aria-labelledby="y-label">
+    <div class="panel hoy" id="hoy"></div>
+    <div id="cambios"></div>
     <div class="cal-head">
       <div class="yearnav">
         <button type="button" class="icon" id="y-prev" aria-label="12 meses antes">‹</button>
@@ -302,10 +430,21 @@ details.tool>.form{padding:4px 16px 18px}
         <button type="button" class="icon" id="y-next" aria-label="12 meses después">›</button>
         <button type="button" class="btn ghost sm" id="go-today">Ir a hoy</button>
       </div>
-      <div class="stats" id="cal-stats"></div>
+      <div class="seg modo" role="group" aria-label="Ver o editar el calendario">
+        <button type="button" data-cm="ver" aria-pressed="true">Ver</button>
+        <button type="button" data-cm="editar" aria-pressed="false">Editar</button>
+      </div>
     </div>
+    <div class="editbar" id="editbar" hidden>
+      <p class="muted">¿Qué quieres editar?</p>
+      <div class="seg" role="group" aria-label="Qué editar">
+        <button type="button" data-cs="quien" aria-pressed="true">A quién le toca cada día</button>
+        <button type="button" data-cs="cosas" aria-pressed="false">Cosas de cada día</button>
+      </div>
+    </div>
+    <div class="stats" id="cal-stats"></div>
 
-    <details class="tool" id="pattern">
+    <details class="tool" id="pattern" hidden>
       <summary>Repetir un patrón <span class="muted">semanas alternas, quincenas, cada X días o mes a mitad</span></summary>
       <form id="pattern-form" class="form" novalidate>
         <div class="field"><label for="pt-desde">Desde</label><input type="date" id="pt-desde" name="desde"></div>
@@ -340,19 +479,47 @@ details.tool>.form{padding:4px 16px 18px}
       </form>
     </details>
 
+    <details class="tool" id="cambio-tool">
+      <summary>Pedir un cambio de día <span class="muted">el otro lo acepta o lo rechaza</span></summary>
+      <form id="cambio-form" class="form" novalidate>
+        <div class="row2">
+          <div class="field"><label for="cb-desde">Día</label><input type="date" id="cb-desde" name="desde"></div>
+          <div class="field"><label for="cb-hasta">Hasta <span class="muted">(opcional)</span></label><input type="date" id="cb-hasta" name="hasta"></div>
+        </div>
+        <fieldset class="field">
+          <legend>Que esos días estén con</legend>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="para" id="cb-para-papa" value="papa"><span><i class="dot papa"></i>Papá</span></label>
+            <label class="chip"><input type="radio" name="para" id="cb-para-mama" value="mama"><span><i class="dot mama"></i>Mamá</span></label>
+          </div>
+        </fieldset>
+        <fieldset class="field">
+          <legend>Lo pide</legend>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="de" id="cb-de-papa" value="papa"><span><i class="dot papa"></i>Papá</span></label>
+            <label class="chip"><input type="radio" name="de" id="cb-de-mama" value="mama"><span><i class="dot mama"></i>Mamá</span></label>
+          </div>
+        </fieldset>
+        <div class="field"><label for="cb-motivo">Motivo <span class="muted">(opcional)</span></label><input type="text" id="cb-motivo" name="motivo" maxlength="120" placeholder="Tengo viaje de trabajo" autocomplete="off"></div>
+        <p class="form-err" id="cb-err" role="alert"></p>
+        <div class="actions"><button class="btn" type="submit">Enviar petición</button></div>
+      </form>
+    </details>
+
     <div id="months" class="months"></div>
 
-    <div class="palette" role="toolbar" aria-label="Asignar días">
-      <div class="brushes">
+    <div class="palette" role="toolbar" aria-label="Asignar días" hidden>
+      <div class="brushes" id="brushes">
         <button type="button" class="brush" data-brush="papa" aria-pressed="true"><span class="sw papa"></span>Papá</button>
         <button type="button" class="brush" data-brush="mama" aria-pressed="false"><span class="sw mama"></span>Mamá</button>
         <button type="button" class="brush" data-brush="borrar" aria-pressed="false"><span class="sw none"></span>Borrar</button>
       </div>
-      <div class="seg" role="group" aria-label="Modo">
+      <div class="seg" role="group" aria-label="Modo" id="brush-mode">
         <button type="button" data-mode="dia" aria-pressed="true">Día</button>
         <button type="button" data-mode="rango" aria-pressed="false">Rango</button>
       </div>
       <p class="hint" id="cal-hint"></p>
+      <button type="button" class="btn sm" id="cal-done">Terminar de editar</button>
     </div>
   </section>
 
@@ -361,14 +528,15 @@ details.tool>.form{padding:4px 16px 18px}
     <div class="layout">
       <div class="side">
         <h2 class="h2" id="cu-title">Cuentas</h2>
-        <p class="lede">Gastos de los niños y quién le debe a quién.</p>
+        <p class="lede">Gastos de los hijos y quién le debe a quién. Pablo y Álvaro también pueden apuntar lo que pagan ellos.</p>
         <div class="panel" style="margin-top:18px">
           <div id="cu-balance"></div>
         </div>
         <div class="panel" style="margin-top:14px">
-          <h3>Añadir gasto o pago</h3>
+          <h3 id="cu-form-title">Añadir gasto o pago</h3>
           <form id="cu-form" class="form" novalidate>
             <div class="field"><label for="cu-concepto">Concepto</label><input type="text" id="cu-concepto" name="concepto" maxlength="80" placeholder="Dentista de Álvaro" autocomplete="off"></div>
+            <div class="field"><label for="cu-cat">Categoría <span class="muted">(opcional)</span></label><select id="cu-cat" name="categoria"><option value="">Sin categoría</option></select></div>
             <div class="row2">
               <div class="field"><label for="cu-importe">Importe (€)</label><input type="text" id="cu-importe" name="importe" inputmode="decimal" placeholder="60,00" autocomplete="off"></div>
               <div class="field"><label for="cu-fecha">Fecha</label><input type="date" id="cu-fecha" name="fecha"></div>
@@ -378,9 +546,19 @@ details.tool>.form{padding:4px 16px 18px}
               <div class="chips">
                 <label class="chip"><input type="radio" name="pagador" id="cu-p-papa" value="papa"><span><i class="dot papa"></i>Papá</span></label>
                 <label class="chip"><input type="radio" name="pagador" id="cu-p-mama" value="mama"><span><i class="dot mama"></i>Mamá</span></label>
+                <label class="chip"><input type="radio" name="pagador" id="cu-p-pablo" value="pablo"><span>Pablo</span></label>
+                <label class="chip"><input type="radio" name="pagador" id="cu-p-alvaro" value="alvaro"><span>Álvaro</span></label>
               </div>
             </fieldset>
-            <fieldset class="field">
+            <fieldset class="field" id="cu-debe-f" hidden>
+              <legend>¿Quién se lo devuelve?</legend>
+              <div class="chips">
+                <label class="chip"><input type="radio" name="debe" id="cu-d-medias" value="medias" checked><span>Papá y Mamá a medias</span></label>
+                <label class="chip"><input type="radio" name="debe" id="cu-d-papa" value="papa"><span><i class="dot papa"></i>Papá</span></label>
+                <label class="chip"><input type="radio" name="debe" id="cu-d-mama" value="mama"><span><i class="dot mama"></i>Mamá</span></label>
+              </div>
+            </fieldset>
+            <fieldset class="field" id="cu-reparto-f">
               <legend>Cómo se reparte</legend>
               <div class="chips">
                 <label class="chip"><input type="radio" name="tipo" id="cu-t-medias" value="medias" checked><span>A medias</span></label>
@@ -390,47 +568,14 @@ details.tool>.form{padding:4px 16px 18px}
             </fieldset>
             <p class="help" id="cu-help"></p>
             <p class="form-err" id="cu-err" role="alert"></p>
-            <div class="actions"><button class="btn" type="submit">Añadir</button></div>
+            <div class="actions"><button class="btn" type="submit" id="cu-submit">Añadir</button><button class="btn ghost" type="button" id="cu-cancel" hidden>Cancelar</button></div>
           </form>
         </div>
       </div>
       <div>
+        <button type="button" class="btn wa-btn" id="cu-resumen"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>Copiar las cuentas del mes para WhatsApp</button>
         <div class="list-head"><h3>Movimientos</h3><span class="muted" id="cu-count" style="font-size:13px"></span></div>
         <div id="cu-list"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- NOTAS -->
-  <section id="tab-notas" class="tab" aria-labelledby="no-title" hidden>
-    <div class="layout">
-      <div class="side">
-        <h2 class="h2" id="no-title">Notas</h2>
-        <p class="lede">Lo que uno le quiere decir al otro, para que quede apuntado.</p>
-        <div class="panel" style="margin-top:18px">
-          <form id="no-form" class="form" novalidate>
-            <div class="field"><label for="no-texto">Nota</label><textarea id="no-texto" name="texto" maxlength="2000" placeholder="El jueves Pablo sale antes del cole, a las 13:00."></textarea></div>
-            <fieldset class="field">
-              <legend>De</legend>
-              <div class="chips">
-                <label class="chip"><input type="radio" name="autor" id="no-a-papa" value="papa"><span><i class="dot papa"></i>Papá</span></label>
-                <label class="chip"><input type="radio" name="autor" id="no-a-mama" value="mama"><span><i class="dot mama"></i>Mamá</span></label>
-              </div>
-            </fieldset>
-            <p class="form-err" id="no-err" role="alert"></p>
-            <div class="actions"><button class="btn" type="submit">Guardar nota</button></div>
-          </form>
-        </div>
-      </div>
-      <div>
-        <div class="list-head">
-          <h3 id="no-count">Notas</h3>
-          <div class="seg" role="group" aria-label="Filtrar notas">
-            <button type="button" data-nf="pend" aria-pressed="true">Pendientes</button>
-            <button type="button" data-nf="todas" aria-pressed="false">Todas</button>
-          </div>
-        </div>
-        <div id="no-list"></div>
       </div>
     </div>
   </section>
@@ -440,12 +585,12 @@ details.tool>.form{padding:4px 16px 18px}
     <div class="hor-top">
       <div>
         <h2 class="h2" id="ho-title">Horario semanal</h2>
-        <p class="lede">Actividades de lunes a domingo. La franja de color de cada día dice con quién están esta semana según el calendario.</p>
+        <p class="lede">Elige de quién es el horario para verlo y editarlo. A la derecha de cada día salen las cosas puntuales del calendario.</p>
       </div>
-      <div class="seg" role="group" aria-label="Filtrar por hijo">
-        <button type="button" data-hf="todos" aria-pressed="true">Los dos</button>
+      <div class="seg hijos-sel" role="group" aria-label="De quién es el horario">
         <button type="button" data-hf="pablo" aria-pressed="false">Pablo</button>
         <button type="button" data-hf="alvaro" aria-pressed="false">Álvaro</button>
+        <button type="button" data-hf="todos" aria-pressed="true">Los dos</button>
       </div>
     </div>
 
@@ -474,10 +619,6 @@ details.tool>.form{padding:4px 16px 18px}
           <div class="field"><label for="hor-ini-h">Empieza</label><div class="hora"><select id="hor-ini-h" aria-label="Hora de inicio"></select><span>:</span><select id="hor-ini-m" aria-label="Minutos de inicio"></select></div></div>
           <div class="field"><label for="hor-fin-h">Termina <span class="muted">(opcional)</span></label><div class="hora"><select id="hor-fin-h" aria-label="Hora de fin"></select><span>:</span><select id="hor-fin-m" aria-label="Minutos de fin"></select></div></div>
         </div>
-        <div class="row2">
-          <div class="field"><label for="hor-lleva">Lo lleva</label><select id="hor-lleva" name="lleva"><option value="">Sin decidir</option><option value="papa">Papá</option><option value="mama">Mamá</option></select></div>
-          <div class="field"><label for="hor-recoge">Lo recoge</label><select id="hor-recoge" name="recoge"><option value="">Sin decidir</option><option value="papa">Papá</option><option value="mama">Mamá</option></select></div>
-        </div>
         <p class="form-err span-all" id="hor-err" role="alert"></p>
         <div class="actions span-all">
           <button class="btn" type="submit" id="hor-submit">Guardar</button>
@@ -487,9 +628,74 @@ details.tool>.form{padding:4px 16px 18px}
       </form>
     </details>
 
+    <div class="weeknav">
+      <button type="button" class="icon" id="wk-prev" aria-label="Semana anterior">‹</button>
+      <button type="button" class="icon" id="wk-next" aria-label="Semana siguiente">›</button>
+      <span id="wk-label"></span>
+      <button type="button" class="btn ghost sm" id="wk-hoy" hidden>Volver a esta semana</button>
+    </div>
     <div class="week" id="week"></div>
   </section>
 </main>
+
+
+<!-- Ficha de un día: ver lo que hay y, en modo editar, añadir o cambiar -->
+<div class="sheet" id="dia" hidden>
+  <div class="sheet-box" role="dialog" aria-modal="true" aria-labelledby="dia-t">
+    <div class="sheet-h"><h3 id="dia-t"></h3><button type="button" class="icon" data-cerrar aria-label="Cerrar">×</button></div>
+    <p class="dia-who" id="dia-who"></p>
+    <div id="dia-evs"></div>
+    <button type="button" class="btn ghost sm" id="dia-a-editar">Añadir o cambiar cosas de este día</button>
+    <form id="ev-form" class="form" novalidate hidden>
+      <h4 id="ev-form-title">Añadir algo este día</h4>
+      <div class="field"><label for="ev-titulo">Qué es</label><input type="text" id="ev-titulo" name="titulo" maxlength="80" placeholder="Dentista, tutoría, cumpleaños…" autocomplete="off"></div>
+      <div class="row2">
+        <div class="field"><label for="ev-fecha">Fecha</label><input type="date" id="ev-fecha" name="fecha"></div>
+        <div class="field"><label for="hor-ev-h">Hora <span class="muted">(vacía = todo el día)</span></label><div class="hora"><select id="hor-ev-h" aria-label="Hora"></select><span>:</span><select id="hor-ev-m" aria-label="Minutos"></select></div></div>
+      </div>
+      <fieldset class="field">
+        <legend>Para</legend>
+        <div class="chips">
+          <label class="chip"><input type="radio" name="hijo" id="ev-h-pablo" value="pablo"><span>Pablo</span></label>
+          <label class="chip"><input type="radio" name="hijo" id="ev-h-alvaro" value="alvaro"><span>Álvaro</span></label>
+          <label class="chip"><input type="radio" name="hijo" id="ev-h-ambos" value="ambos" checked><span>Los dos</span></label>
+        </div>
+      </fieldset>
+      <div class="field"><label for="ev-lugar">Lugar <span class="muted">(opcional)</span></label><input type="text" id="ev-lugar" name="lugar" maxlength="60" placeholder="Clínica" autocomplete="off"></div>
+      <p class="form-err" id="ev-err" role="alert"></p>
+      <div class="actions">
+        <button class="btn" type="submit" id="ev-submit">Añadir</button>
+        <button class="btn ghost" type="button" id="ev-cancel" hidden>Cancelar</button>
+        <button class="link-btn" type="button" id="ev-del" hidden>Borrar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Lista de todo lo que hay en un mes -->
+<div class="sheet" id="lista" hidden>
+  <div class="sheet-box" role="dialog" aria-modal="true" aria-labelledby="lista-t">
+    <div class="sheet-h"><h3 id="lista-t"></h3><button type="button" class="icon" data-cerrar aria-label="Cerrar">×</button></div>
+    <div id="lista-body"></div>
+  </div>
+</div>
+
+<!-- Resumen de cuentas de un mes, para copiar o mandar por WhatsApp -->
+<div class="sheet" id="resumen" hidden>
+  <div class="sheet-box" role="dialog" aria-modal="true" aria-labelledby="res-t">
+    <div class="sheet-h"><h3 id="res-t">Cuentas del mes</h3><button type="button" class="icon" data-cerrar aria-label="Cerrar">×</button></div>
+    <div class="weeknav">
+      <button type="button" class="icon" id="res-prev" aria-label="Mes anterior">‹</button>
+      <button type="button" class="icon" id="res-next" aria-label="Mes siguiente">›</button>
+      <span id="res-mes" class="res-mes"></span>
+    </div>
+    <pre class="res-txt" id="res-txt"></pre>
+    <div class="actions">
+      <button type="button" class="btn" id="res-copiar">Copiar texto</button>
+      <a class="btn ghost" id="res-wa" href="#" target="_blank" rel="noopener">Abrir WhatsApp</a>
+    </div>
+  </div>
+</div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <button type="button" class="to-top" id="to-top" aria-label="Subir arriba del todo" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
@@ -498,7 +704,7 @@ details.tool>.form{padding:4px 16px 18px}
 <div class="login" id="login" hidden>
   <form class="login-box" id="login-form" novalidate>
     <div>
-      <h1 class="brand">Pablo y Álvaro</h1>
+      <h1 class="brand">Familia</h1>
       <p class="lede">Agenda familiar. Escribe la contraseña de la familia para entrar.</p>
     </div>
     <div class="field">
@@ -513,7 +719,7 @@ details.tool>.form{padding:4px 16px 18px}
       <div class="chips">
         <label class="chip"><input type="radio" name="quien" id="lg-papa" value="papa"><span><i class="dot papa"></i>Papá</span></label>
         <label class="chip"><input type="radio" name="quien" id="lg-mama" value="mama"><span><i class="dot mama"></i>Mamá</span></label>
-        <label class="chip"><input type="radio" name="quien" id="lg-pablo" value="pablo"><span>Pablo</span></label>
+        <label class="chip"><input type="radio" name="quien" id="lg-hijos" value="hijos"><span>Hijos</span></label>
       </div>
     </fieldset>
     <p class="form-err" id="lg-err" role="alert"></p>
@@ -545,9 +751,12 @@ var DIAS_L = ['L','M','X','J','V','S','D'];
 var MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 var MES_C = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 var COLLS = ['cal','cuentas','notas','horario'];
-var TABS = ['calendario','cuentas','notas','horario'];
+var TABS = ['calendario','cuentas','horario'];
+var CATS = {colegio:'Colegio', salud:'Salud', ropa:'Ropa', actividades:'Actividades', ocio:'Ocio', comida:'Comida', otros:'Otros'};
 var COLORES = {negro:['Negro','#0b0b0b'], gris:['Gris','#9a9a9a'], azul:['Azul','#2563eb'], morado:['Morado','#7c3aed'], naranja:['Naranja','#ea580c'], amarillo:['Amarillo','#d4a106'], rosa:['Rosa','#db2777'], verde:['Verde','#0d9488']};
 function colorDe(c){ return COLORES[c] ? c : 'negro'; }
+function rgba(hex, a){ var n = parseInt(hex.slice(1), 16); return 'rgba(' + (n >> 16 & 255) + ',' + (n >> 8 & 255) + ',' + (n & 255) + ',' + a + ')'; }
+function difuminado(hex){ return 'linear-gradient(135deg,' + rgba(hex, .30) + ',' + rgba(hex, .12) + ')'; }
 
 function $(s, r){ return (r || document).querySelector(s); }
 function $$(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
@@ -594,14 +803,23 @@ var ui = {
   brush: 'papa',
   mode: 'dia',
   rangeStart: null,
-  me: who(lsGet('fam_me')),
+  me: who(lsGet('fam_quien')) || who(lsGet('fam_me')), // quién usa este móvil: se elige al entrar
   nf: 'pend',
   hf: 'todos',
   editId: null,
   colorTocado: false,
+  editCal: false,   // el calendario solo se puede cambiar en modo «Editar» (evita toques sin querer)
+  calSub: 'quien',  // en modo editar: 'quien' (a quién le toca) o 'cosas' (cosas de cada día)
+  diaKey: null,     // día abierto en la ficha
+  listaMes: null,   // mes abierto en la lista (AAAA-MM)
+  resMes: today.getFullYear() * 12 + today.getMonth(), // mes del resumen de cuentas
+  week: 0,          // semana que se ve en el horario: 0 = esta, 1 = la que viene…
+  notasNuevas: 0,
+  evEdit: null, evVersion: 0,              // evento que se está editando
+  cuEdit: null, cuVersion: 0,              // movimiento de cuentas que se está editando
   scrolledOnce: false
 };
-var snap = {cal:{}, cuentas:{}, notas:{}, horario:{}};
+var snap = {cal:{}, cuentas:{}, notas:{}, horario:{}, eventos:{}, cambios:{}};
 var overlay = new Map();     // 'coleccion/id' -> cambio aún sin confirmar por el servidor (null = borrado)
 var calOverlay = new Map();  // 'AAAA-MM-DD' -> 'papa' | 'mama' | null, aún sin confirmar
 var pending = new Map();     // gastos, notas y actividades pendientes de enviar
@@ -680,7 +898,7 @@ function aplicarDatos(d){
     (cal[mid] || (cal[mid] = {days:{}})).days[k] = w;
   });
   snap.cal = cal;
-  ['cuentas','notas','horario'].forEach(function(c){
+  ['cuentas','notas','horario','eventos','cambios'].forEach(function(c){
     var m = {};
     (Array.isArray(d[c]) ? d[c] : []).forEach(function(r){ if (r && typeof r.id === 'string') m[r.id] = r; });
     snap[c] = m;
@@ -690,7 +908,7 @@ function guardarCache(){ lsSet('fam_cache', JSON.stringify({rev: rev, snap: snap
 function cargarCache(){
   try {
     var c = JSON.parse(lsGet('fam_cache') || 'null');
-    if (c && c.snap){ snap = Object.assign({cal:{}, cuentas:{}, notas:{}, horario:{}}, c.snap); rev = c.rev || null; }
+    if (c && c.snap){ snap = Object.assign({cal:{}, cuentas:{}, notas:{}, horario:{}, eventos:{}, cambios:{}}, c.snap); rev = c.rev || null; }
   } catch(e){}
 }
 
@@ -831,7 +1049,7 @@ function ocultarLogin(){ $('#login').hidden = true; document.body.classList.remo
 function borrarDatosLocales(){
   token = null; rev = null;
   try { localStorage.removeItem('fam_token'); localStorage.removeItem('fam_cache'); } catch(e){}
-  snap = {cal:{}, cuentas:{}, notas:{}, horario:{}};
+  snap = {cal:{}, cuentas:{}, notas:{}, horario:{}, eventos:{}, cambios:{}};
   overlay.clear(); calOverlay.clear(); pending.clear(); pendingCal.clear();
   clearTimeout(reintentoT);
   $('#banner').hidden = true; $('#migrar').hidden = true;
@@ -844,7 +1062,7 @@ function sesionPerdida(){
 }
 
 /* ---------- Datos que este dispositivo guardó antes de compartir la app ---------- */
-var LEGADO = ['cal','cuentas','notas','horario'];
+var LEGADO = ['cal','cuentas','horario'];
 function datosAntiguos(){
   var r = {}, n = 0;
   LEGADO.forEach(function(c){
@@ -862,7 +1080,6 @@ function revisarDatosAntiguos(){
   function cuenta(n, uno, varios){ if (n) partes.push(n + ' ' + (n === 1 ? uno : varios)); }
   cuenta(dias, 'día del calendario', 'días del calendario');
   cuenta(Object.keys(a.cuentas).length, 'movimiento', 'movimientos');
-  cuenta(Object.keys(a.notas).length, 'nota', 'notas');
   cuenta(Object.keys(a.horario).length, 'actividad', 'actividades');
   $('#migrar-text').textContent = 'Este dispositivo tiene datos de antes de compartir la app (' + partes.join(', ') + '). ¿Los subes a la agenda compartida?';
   $('#migrar').hidden = false;
@@ -877,7 +1094,7 @@ function subirAntiguos(){
     Object.keys(d).forEach(function(k){ if (isKey(k) && who(d[k])) ch.push([k, d[k]]); });
   });
   if (ch.length) applyChanges(ch);
-  ['cuentas','notas','horario'].forEach(function(c){
+  ['cuentas','horario'].forEach(function(c){
     Object.keys(a[c]).forEach(function(id){
       var r = a[c][id];
       if (r && typeof r === 'object' && /^[a-z0-9]{6,40}$/.test(id) && !snap[c][id]) save(c, id, r);
@@ -939,10 +1156,18 @@ function renderHeader(){
   var html = '<span class="dot ' + (w || '') + '"></span><span>' +
     (w ? 'Hoy están con <b>' + P[w] + '</b>' + esc(nextChangeText(cal)) : 'Hoy: sin asignar') + '</span>';
   $('#today').innerHTML = html;
-  $$('[data-me]').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.me === ui.me)); });
 }
 function renderCal(){
   var cal = docs('cal');
+  var evDays = {}, reqDays = {};
+  var evKids = {};
+  evList().forEach(function(e){
+    evDays[e.fecha] = (evDays[e.fecha] || 0) + 1;
+    var q = evKids[e.fecha] || (evKids[e.fecha] = {p:false, a:false});
+    if (e.hijo !== 'alvaro') q.p = true;
+    if (e.hijo !== 'pablo') q.a = true;
+  });
+  cambiosList().forEach(function(c){ if (c.estado === 'pendiente') diasDe(c).forEach(function(k){ reqDays[k] = 1; }); });
   var cnt = {papa:0, mama:0, none:0};
   var html = '';
   for (var i = 0; i < 12; i++){
@@ -950,7 +1175,8 @@ function renderCal(){
     var mid = y + '-' + pad(m + 1);
     var days = (cal[mid] && cal[mid].days) || {};
     var first = new Date(y, m, 1), off = wdIndex(first), n = new Date(y, m + 1, 0).getDate();
-    var mc = {papa:0, mama:0};
+    var mc = {papa:0, mama:0}, nev = 0;
+    Object.keys(evDays).forEach(function(k0){ if (k0.slice(0, 7) === mid) nev += evDays[k0]; });
     var cells = '';
     for (var b = 0; b < off; b++) cells += '<span class="d blank" aria-hidden="true"></span>';
     for (var d = 1; d <= n; d++){
@@ -961,12 +1187,17 @@ function renderCal(){
       if (w) cls += ' ' + w;
       if (key === TODAY) cls += ' today';
       if (key === ui.rangeStart) cls += ' start';
-      cells += '<button type="button" class="' + cls + '" data-k="' + key + '" aria-label="' + d + ' de ' + MESES[m] + (w ? ', con ' + P[w] : ', sin asignar') + '">' + d + '</button>';
+      if (evDays[key]) cls += ' ev';
+      if (reqDays[key]) cls += ' req';
+      var q = evKids[key], letras = q ? (q.p ? 'P' : '') + (q.a ? 'A' : '') : '';
+      cells += '<button type="button" class="' + cls + '" data-k="' + key + '" aria-label="' + d + ' de ' + MESES[m] + (w ? ', con ' + P[w] : ', sin asignar') +
+        (q ? ', hay algo para ' + (q.p && q.a ? 'los dos' : q.p ? 'Pablo' : 'Álvaro') : '') + '">' + d + (letras ? '<span class="ek" aria-hidden="true">' + letras + '</span>' : '') + '</button>';
     }
     var isCur = (y === today.getFullYear() && m === today.getMonth());
     html += '<section class="month' + (isCur ? ' current' : '') + '" id="m-' + mid + '">' +
-      '<h3><span class="mname">' + MESES[m] + (y !== today.getFullYear() ? ' ' + y : '') + '</span><small>' +
-      '<span><i class="dot papa"></i>' + mc.papa + '</span><span><i class="dot mama"></i>' + mc.mama + '</span></small></h3>' +
+      '<h3><span class="mname">' + MESES[m] + (y !== today.getFullYear() ? ' ' + y : '') + '</span><span class="mright"><small>' +
+      '<span><i class="dot papa"></i>' + mc.papa + '</span><span><i class="dot mama"></i>' + mc.mama + '</span></small>' +
+      '<button type="button" class="mlist" data-lista="' + mid + '" aria-label="Lista de cosas de ' + MESES[m] + '">☰ Lista' + (nev ? ' <b>' + nev + '</b>' : '') + '</button></span></h3>' +
       '<div class="wd" aria-hidden="true">' + DIAS_L.map(function(l){ return '<span>' + l + '</span>'; }).join('') + '</div>' +
       '<div class="grid">' + cells + '</div></section>';
   }
@@ -976,15 +1207,26 @@ function renderCal(){
   $('#cal-stats').innerHTML =
     '<span><i class="dot papa"></i>Papá <b class="num">' + cnt.papa + '</b> días</span>' +
     '<span><i class="dot mama"></i>Mamá <b class="num">' + cnt.mama + '</b> días</span>' +
-    '<span><i class="dot"></i>Sin asignar <b class="num">' + cnt.none + '</b></span>';
+    '<span><i class="dot"></i>Sin asignar <b class="num">' + cnt.none + '</b></span>' +
+    '<span class="ek-leg">Cosas apuntadas: <b>P</b> Pablo <b>A</b> Álvaro</span>';
   $$('[data-brush]').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.brush === ui.brush)); });
   $$('[data-mode]').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.mode === ui.mode)); });
   var target = ui.brush === 'borrar' ? 'dejarlo sin asignar' : 'ponerlo con ' + P[ui.brush];
   var hint;
-  if (ui.mode === 'dia') hint = 'Toca un día para ' + target + '.' + (ui.brush !== 'borrar' ? ' Otro toque lo quita.' : '');
+  if (ui.calSub === 'cosas') hint = 'Toca un día para añadir o cambiar lo que hay ese día.';
+  else if (ui.mode === 'dia') hint = 'Toca un día para ' + target + '.' + (ui.brush !== 'borrar' ? ' Otro toque lo quita.' : '');
   else if (!ui.rangeStart) hint = 'Rango: toca el primer día.';
   else hint = 'Desde el ' + dShort(ui.rangeStart) + '. Ahora toca el último día.';
   $('#cal-hint').textContent = hint;
+  $('.palette').hidden = !ui.editCal;
+  $('#brushes').hidden = $('#brush-mode').hidden = ui.calSub === 'cosas';
+  $('#months').classList.toggle('full', ui.editCal);
+  $('#editbar').hidden = !ui.editCal;
+  $('#pattern').hidden = !(ui.editCal && ui.calSub === 'quien');
+  $('#cambio-tool').hidden = ui.editCal;
+  $$('[data-cm]').forEach(function(b){ b.setAttribute('aria-pressed', String((b.dataset.cm === 'editar') === ui.editCal)); });
+  $$('[data-cs]').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.cs === ui.calSub)); });
+  actualizarSubir();
 }
 function scrollToMonth(y, m){
   var el = document.getElementById('m-' + y + '-' + pad(m + 1));
@@ -1011,24 +1253,58 @@ function patternHelp(){
 }
 
 /* ---------- Cuentas ---------- */
+var KIDS = {pablo:'Pablo', alvaro:'Álvaro'};
+function kid(v){ return KIDS[v] ? v : null; }
+function nombre(v){ return P[v] || KIDS[v] || ''; }
 function effect(c){ var a = +c.importe || 0; return c.tipo === 'medias' ? a / 2 : a; }
+function esGasto(c){ return c.tipo === 'medias' || c.tipo === 'otro' || c.tipo === 'hijo'; }
 function cuentasList(){
   var all = docs('cuentas');
   return Object.keys(all).map(function(id){ return Object.assign({id:id}, all[id]); })
-    .filter(function(c){ return who(c.pagador) && +c.importe > 0 && ['medias','otro','pago'].indexOf(c.tipo) >= 0; })
+    .filter(function(c){
+      if (!(+c.importe > 0)) return false;
+      if (who(c.pagador) && ['medias','otro','pago'].indexOf(c.tipo) >= 0) return true;               // entre Papá y Mamá
+      if (kid(c.pagador) && c.tipo === 'hijo' && ['medias','papa','mama'].indexOf(c.debe) >= 0) return true; // lo pagó un hijo
+      return who(c.pagador) && c.tipo === 'devolucion' && !!kid(c.hijo);                              // un padre se lo devuelve
+    })
     .sort(function(a, b){ return String(b.fecha || '').localeCompare(String(a.fecha || '')) || String(b.creado || '').localeCompare(String(a.creado || '')); });
 }
 function balanceOf(list){
   var bal = 0;
-  list.forEach(function(c){ var e = effect(c); bal += c.pagador === 'papa' ? e : -e; });
+  list.forEach(function(c){ if (!who(c.pagador) || ['medias','otro','pago'].indexOf(c.tipo) < 0) return; var e = effect(c); bal += c.pagador === 'papa' ? e : -e; });
   return Math.round(bal * 100) / 100; // > 0: Mamá debe a Papá
+}
+/* Lo que cada padre le debe a cada hijo: {pablo:{papa:x, mama:y}, alvaro:{…}} */
+function deudasHijos(list){
+  var d = {pablo:{papa:0, mama:0}, alvaro:{papa:0, mama:0}};
+  list.forEach(function(c){
+    var imp = +c.importe;
+    if (c.tipo === 'hijo'){
+      if (c.debe === 'medias'){ d[c.pagador].papa += imp / 2; d[c.pagador].mama += imp / 2; }
+      else d[c.pagador][c.debe] += imp;
+    } else if (c.tipo === 'devolucion') d[c.hijo][c.pagador] -= imp;
+  });
+  Object.keys(d).forEach(function(h){ ['papa','mama'].forEach(function(p){ d[h][p] = Math.round(d[h][p] * 100) / 100; }); });
+  return d;
+}
+function lineasHijos(list){
+  var d = deudasHijos(list), out = [];
+  Object.keys(d).forEach(function(h){ ['papa','mama'].forEach(function(p){ if (d[h][p] >= 0.005) out.push({padre:p, hijo:h, imp:d[h][p]}); }); });
+  return out;
+}
+function textoTipo(c){
+  if (c.tipo === 'hijo') return c.debe === 'medias' ? 'se lo devuelven Papá y Mamá a medias' : 'se lo devuelve ' + P[c.debe];
+  if (c.tipo === 'devolucion') return 'devuelto a ' + KIDS[c.hijo];
+  var o = OTHER[c.pagador];
+  return c.tipo === 'medias' ? 'a medias' : c.tipo === 'otro' ? 'lo paga ' + P[o] : 'pago a ' + P[o];
 }
 function renderCuentas(){
   var list = cuentasList(), bal = balanceOf(list);
   var yr = String(today.getFullYear());
-  var gastos = list.filter(function(c){ return c.tipo !== 'pago' && String(c.fecha || '').slice(0, 4) === yr; });
-  var tot = 0, pp = 0, pm = 0;
-  gastos.forEach(function(c){ tot += +c.importe; if (c.pagador === 'papa') pp += +c.importe; else pm += +c.importe; });
+  var gastos = list.filter(function(c){ return esGasto(c) && String(c.fecha || '').slice(0, 4) === yr; });
+  var tot = 0, porQuien = {papa:0, mama:0, pablo:0, alvaro:0};
+  gastos.forEach(function(c){ tot += +c.importe; porQuien[c.pagador] += +c.importe; });
+  var pp = porQuien.papa, pm = porQuien.mama;
   var h;
   if (Math.abs(bal) < 0.005){
     h = '<div class="balance"><div class="who">Estáis en paz</div><div class="amt num">' + eur(0) + '</div></div>';
@@ -1041,13 +1317,34 @@ function renderCuentas(){
   h += '<div class="balance-meta"><span>Gastos en ' + yr + '</span>' +
     '<span><span>Total</span><span class="num">' + eur(tot) + '</span></span>' +
     '<span><span><i class="dot papa"></i> Pagó Papá</span><span class="num">' + eur(pp) + '</span></span>' +
-    '<span><span><i class="dot mama"></i> Pagó Mamá</span><span class="num">' + eur(pm) + '</span></span></div>';
+    '<span><span><i class="dot mama"></i> Pagó Mamá</span><span class="num">' + eur(pm) + '</span></span>' +
+    ['pablo','alvaro'].filter(function(h){ return porQuien[h] > 0; }).map(function(h){
+      return '<span><span>Pagó ' + KIDS[h] + '</span><span class="num">' + eur(porQuien[h]) + '</span></span>';
+    }).join('');
+  var porCat = {};
+  gastos.forEach(function(c){ var k0 = CATS[c.categoria] ? c.categoria : ''; porCat[k0] = (porCat[k0] || 0) + (+c.importe); });
+  var cats = Object.keys(porCat).sort(function(a, b){ return porCat[b] - porCat[a]; });
+  if (cats.length && !(cats.length === 1 && cats[0] === '')){
+    h += '<span style="margin-top:8px">Por categoría</span>' + cats.map(function(k0){
+      return '<span><span>' + (CATS[k0] || 'Sin categoría') + '</span><span class="num">' + eur(porCat[k0]) + '</span></span>';
+    }).join('');
+  }
+  h += '</div>';
+  var lh = lineasHijos(list);
+  if (lh.length){
+    h += '<div class="hijos-deben"><h4>Con Pablo y Álvaro</h4>' + lh.map(function(x){
+      return '<div class="hd-row"><span><i class="dot ' + x.padre + '"></i><b>' + P[x.padre] + '</b> debe <b class="num">' + eur(x.imp) + '</b> a <b>' + KIDS[x.hijo] + '</b></span>' +
+        '<button type="button" class="link-btn" data-devolver="' + x.padre + ':' + x.hijo + '">Marcar como devuelto</button></div>';
+    }).join('') + '</div>';
+  }
   $('#cu-balance').innerHTML = h;
   $('#cu-count').textContent = list.length ? list.length + (list.length === 1 ? ' movimiento' : ' movimientos') : '';
   if (!list.length){
     $('#cu-list').innerHTML = '<p class="empty-msg">Todavía no hay movimientos. Añade el primero con el formulario: por ejemplo, la compra de material escolar.</p>';
     return;
   }
+  var totMes = {};
+  list.forEach(function(c){ if (esGasto(c)){ var g0 = String(c.fecha || '').slice(0, 7); totMes[g0] = (totMes[g0] || 0) + (+c.importe); } });
   var out = '', curGroup = '';
   list.forEach(function(c){
     var g = String(c.fecha || '').slice(0, 7);
@@ -1055,16 +1352,19 @@ function renderCuentas(){
       if (curGroup) out += '</ul>';
       curGroup = g;
       var gl = /^\d{4}-\d{2}$/.test(g) ? MESES[+g.slice(5) - 1] + ' ' + g.slice(0, 4) : 'Sin fecha';
-      out += '<div class="group-h">' + gl + '</div><ul class="list">';
+      out += '<div class="group-h"><span>' + gl + '</span>' + (totMes[g] ? '<span class="num">' + eur(totMes[g]) + ' en gastos</span>' : '') + '</div><ul class="list">';
     }
-    var o = OTHER[c.pagador];
-    var tipo = c.tipo === 'medias' ? 'A medias' : c.tipo === 'otro' ? 'Todo a cuenta de ' + P[o] : 'Pago a ' + P[o];
+    var o = OTHER[c.pagador], efecto;
+    var tipo = textoTipo(c); tipo = tipo.charAt(0).toUpperCase() + tipo.slice(1);
+    if (c.tipo === 'hijo') efecto = c.debe === 'medias' ? eur(+c.importe / 2) + ' cada uno a ' + KIDS[c.pagador] : P[c.debe] + ' le debe ' + eur(+c.importe) + ' a ' + KIDS[c.pagador];
+    else if (c.tipo === 'devolucion') efecto = 'ya devuelto a ' + KIDS[c.hijo];
+    else efecto = eur(effect(c)) + ' a favor de ' + P[c.pagador];
     out += '<li class="row">' +
       '<div class="row-date">' + (isKey(c.fecha) ? dShort(c.fecha) : '') + '</div>' +
       '<div><div class="row-title">' + esc(c.concepto || 'Sin concepto') + '</div>' +
-      '<div class="row-meta"><i class="dot ' + c.pagador + '"></i>Pagó ' + P[c.pagador] + ' · ' + tipo + '</div></div>' +
-      '<div class="row-amt"><div class="num">' + eur(+c.importe) + '</div><div class="row-eff">' + eur(effect(c)) + ' a favor de ' + P[c.pagador] + '</div></div>' +
-      '<div class="row-tools"><button type="button" class="link-btn" data-del="cuentas" data-id="' + esc(c.id) + '">Borrar</button></div>' +
+      '<div class="row-meta">' + (who(c.pagador) ? '<i class="dot ' + c.pagador + '"></i>' : '<span class="kidtag">' + KIDS[c.pagador].charAt(0) + '</span>') + 'Pagó ' + nombre(c.pagador) + ' · ' + tipo + (CATS[c.categoria] ? ' · ' + CATS[c.categoria] : '') + '</div></div>' +
+      '<div class="row-amt"><div class="num">' + eur(+c.importe) + '</div><div class="row-eff">' + efecto + '</div></div>' +
+      '<div class="row-tools"><button type="button" class="link-btn" data-cu-edit="' + esc(c.id) + '">Editar</button><button type="button" class="link-btn" data-del="cuentas" data-id="' + esc(c.id) + '">Borrar</button></div>' +
       '</li>';
   });
   out += '</ul>';
@@ -1072,8 +1372,15 @@ function renderCuentas(){
 }
 function cuentaHelp(){
   var f = $('#cu-form'), pag = checked(f, 'pagador'), tipo = checked(f, 'tipo'), imp = parseAmount(f.elements.importe.value);
+  var esHijo = !!kid(pag);
+  $('#cu-debe-f').hidden = !esHijo;
+  $('#cu-reparto-f').hidden = esHijo;
   var t = '';
-  if (pag && tipo){
+  if (esHijo){
+    var debe = checked(f, 'debe') || 'medias', k = KIDS[pag];
+    if (debe === 'medias') t = imp > 0 ? 'Papá y Mamá le deberán ' + eur(imp / 2) + ' cada uno a ' + k + '.' : 'Papá y Mamá le deberán la mitad cada uno a ' + k + '.';
+    else t = P[debe] + ' le deberá ' + (imp > 0 ? eur(imp) : 'el total') + ' a ' + k + '.';
+  } else if (pag && tipo){
     var p = P[pag], o = P[OTHER[pag]];
     var amt = imp > 0 ? eur(tipo === 'medias' ? imp / 2 : imp) : null;
     if (tipo === 'medias') t = amt ? o + ' le deberá ' + amt + ' a ' + p + ' (la mitad).' : o + ' le deberá la mitad a ' + p + '.';
@@ -1081,32 +1388,6 @@ function cuentaHelp(){
     else t = amt ? 'Resta ' + amt + ' de lo que ' + p + ' le debía a ' + o + '.' : 'Sirve para saldar lo que ' + p + ' le debía a ' + o + '.';
   } else if (!pag) t = 'Elige quién pagó.';
   $('#cu-help').textContent = t;
-}
-
-/* ---------- Notas ---------- */
-function renderNotas(){
-  var all = docs('notas');
-  var list = Object.keys(all).map(function(id){ return Object.assign({id:id}, all[id]); })
-    .filter(function(n){ return typeof n.texto === 'string' && n.texto.trim(); })
-    .sort(function(a, b){ return String(b.creado || '').localeCompare(String(a.creado || '')); });
-  var pend = list.filter(function(n){ return !n.hecha; });
-  var shown = ui.nf === 'pend' ? pend : list;
-  $('#no-count').textContent = pend.length ? pend.length + (pend.length === 1 ? ' nota pendiente' : ' notas pendientes') : 'Nada pendiente';
-  $$('[data-nf]').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.nf === ui.nf)); });
-  if (!shown.length){
-    $('#no-list').innerHTML = '<p class="empty-msg">' + (list.length ? 'No hay notas pendientes. Pulsa «Todas» para ver las ya vistas.' : 'Todavía no hay notas. Escribe la primera a la izquierda.') + '</p>';
-    return;
-  }
-  $('#no-list').innerHTML = shown.map(function(n){
-    var a = who(n.autor);
-    return '<article class="note' + (n.hecha ? ' done' : '') + '">' +
-      '<div class="note-h"><i class="dot ' + (a || '') + '"></i><b>' + (a ? 'De ' + P[a] : 'Nota') + '</b><span>' + esc(whenLabel(n.creado)) + '</span>' +
-      (n.hecha ? '<span class="tag">Vista</span>' : '') + '</div>' +
-      '<p>' + esc(n.texto) + '</p>' +
-      '<div class="note-tools"><button type="button" class="link-btn" data-hecha="' + esc(n.id) + '">' + (n.hecha ? 'Volver a pendiente' : 'Marcar como vista') + '</button>' +
-      '<button type="button" class="link-btn" data-del="notas" data-id="' + esc(n.id) + '">Borrar</button></div>' +
-      '</article>';
-  }).join('');
 }
 
 /* ---------- Horario ---------- */
@@ -1121,7 +1402,7 @@ function renderHorario(){
     return h.hijo === ui.hf || h.hijo === 'ambos';
   });
   var cal = docs('cal');
-  var monday = addDays(today, -wdIndex(today));
+  var monday = addDays(today, -wdIndex(today) + 7 * ui.week);
   var html = '';
   for (var i = 0; i < 7; i++){
     var date = addDays(monday, i), k = ymd(date), w = ownerOf(k, cal);
@@ -1130,25 +1411,34 @@ function renderHorario(){
     html += '<section class="daycol' + (w ? ' w-' + w : '') + '" aria-label="' + DIAS[i] + '">' +
       '<div class="day-h"><div class="dname">' + DIAS[i] + (k === TODAY ? '<span class="tag">Hoy</span>' : '') + '</div>' +
       '<div class="ddate"><i class="dot ' + (w || '') + '"></i>' + date.getDate() + ' ' + MES_C[date.getMonth()] + ' · ' + (w ? 'con ' + P[w] : 'sin asignar') + '</div></div>';
+    var evs = evDe(k).filter(function(e){ return ui.hf === 'todos' || e.hijo === ui.hf || e.hijo === 'ambos'; });
+    var izq = '';
     if (col.length){
-      html += '<ul class="items">' + col.map(function(h){
+      izq = '<ul class="items">' + col.map(function(h){
         var ini = hhmm(h.inicio), fin = hhmm(h.fin);
         var lr = '';
-        if (who(h.lleva)) lr += '<span><i class="dot ' + h.lleva + '"></i>Lleva ' + P[h.lleva] + '</span>';
-        if (who(h.recoge)) lr += '<span><i class="dot ' + h.recoge + '"></i>Recoge ' + P[h.recoge] + '</span>';
-        return '<li><button type="button" class="act" style="border-left-color:' + COLORES[colorDe(h.color)][1] + '" data-edit="' + esc(h.id) + '" aria-label="Editar ' + esc(h.actividad) + '">' +
+        return '<li><button type="button" class="act" style="background:' + difuminado(COLORES[colorDe(h.color)][1]) + '" data-edit="' + esc(h.id) + '" aria-label="Editar ' + esc(h.actividad) + '">' +
           '<span class="t">' + (ini || '--:--') + (fin ? '–' + fin : '') + '</span>' +
           '<span class="a">' + esc(h.actividad) + '</span>' +
           '<span class="k"><span class="kid">' + (HIJOS[h.hijo] || 'Los dos') + '</span>' + (h.lugar ? esc(h.lugar) : '') + '</span>' +
           (lr ? '<span class="lr">' + lr + '</span>' : '') +
           '</button></li>';
       }).join('') + '</ul>';
-    } else {
-      html += '<p class="free">Libre</p>';
-    }
+    } else izq = '<p class="free">' + (evs.length ? 'Sin actividades' : 'Libre') + '</p>';
+    // Cosas puntuales del calendario: franja a la derecha (las de todo el día ocupan todo el alto)
+    var der = evs.slice().sort(function(a, b){ return (hhmm(a.hora) ? 1 : 0) - (hhmm(b.hora) ? 1 : 0) || hhmm(a.hora).localeCompare(hhmm(b.hora)); }).map(function(e){
+      var t = hhmm(e.hora);
+      return '<button type="button" class="evs' + (t ? '' : ' todo') + '" data-ir-dia="' + e.fecha + '" aria-label="' + esc(e.titulo) + ', ' + (t || 'todo el día') + '">' +
+        '<span class="t">' + (t || 'Todo el día') + '</span><b>' + esc(e.titulo) + '</b><span class="k">' + evLinea(e) + '</span></button>';
+    }).join('');
+    html += '<div class="dbody' + (der ? ' has-ev' : '') + '"><div class="dleft">' + izq + '</div>' + (der ? '<div class="dright">' + der + '</div>' : '') + '</div>';
     html += '<button type="button" class="add-day" data-addday="' + i + '">+ Añadir</button></section>';
   }
   $('#week').innerHTML = html;
+  var sunday = addDays(monday, 6);
+  var nombreSemana = ui.week === 0 ? 'Esta semana' : ui.week === 1 ? 'Semana que viene' : ui.week === -1 ? 'Semana pasada' : 'Semana';
+  $('#wk-label').innerHTML = nombreSemana + '<small>' + monday.getDate() + (monday.getMonth() !== sunday.getMonth() ? ' ' + MES_C[monday.getMonth()] : '') + ' – ' + sunday.getDate() + ' ' + MES_C[sunday.getMonth()] + '</small>';
+  $('#wk-hoy').hidden = ui.week === 0;
   $$('[data-hf]').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.hf === ui.hf)); });
 }
 function openHorForm(opts){
@@ -1167,8 +1457,6 @@ function openHorForm(opts){
     setHora('fin', hhmm(h.fin));
     setChecked(f, 'color', colorDe(h.color));
     ui.colorTocado = true;
-    f.elements.lleva.value = who(h.lleva) || '';
-    f.elements.recoge.value = who(h.recoge) || '';
     $('#hor-sum').textContent = 'Editar actividad';
     $('#hor-del').hidden = false;
   } else if (opts && opts.dia != null){
@@ -1202,6 +1490,8 @@ function prepararHoras(){
   for (var m = 0; m < 60; m += 5) ms.push(pad(m));
   opciones($('#hor-ini-h'), hs); opciones($('#hor-ini-m'), ms);
   opciones($('#hor-fin-h'), hs, '--'); opciones($('#hor-fin-m'), ms);
+  opciones($('#hor-ev-h'), hs, '--'); opciones($('#hor-ev-m'), ms);
+  $('#ev-fecha').value = TODAY;
   $('#hor-fin-h').addEventListener('change', syncFin);
   setHora('ini', '10:00'); setHora('fin', '');
 }
@@ -1249,13 +1539,221 @@ function refrescarHoy(){
   render();
 }
 
+/* ---------- Eventos con fecha ---------- */
+function evList(){
+  var all = docs('eventos');
+  return Object.keys(all).map(function(id){ return Object.assign({id:id}, all[id]); })
+    .filter(function(e){ return isKey(e.fecha) && typeof e.titulo === 'string' && e.titulo.trim(); })
+    .sort(function(a, b){ return a.fecha.localeCompare(b.fecha) || hhmm(a.hora).localeCompare(hhmm(b.hora)); });
+}
+function evDe(k){ return evList().filter(function(e){ return e.fecha === k; }); }
+function cuantoFalta(k){
+  var n = Math.round((parseKey(k) - parseKey(TODAY)) / 86400000);
+  if (n === 0) return 'hoy';
+  if (n === 1) return 'mañana';
+  if (n === -1) return 'ayer';
+  return n > 0 ? 'en ' + n + ' días' : 'hace ' + (-n) + ' días';
+}
+function resetEvForm(){
+  var f = $('#ev-form');
+  f.reset();
+  f.elements.fecha.value = ui.diaKey || TODAY;
+  setHora('ev', '');
+  ui.evEdit = null;
+  $('#ev-form-title').textContent = 'Añadir algo este día';
+  $('#ev-submit').textContent = 'Añadir';
+  $('#ev-cancel').hidden = true; $('#ev-del').hidden = true;
+  $('#ev-err').textContent = '';
+}
+function resetCuForm(){
+  var f = $('#cu-form');
+  f.elements.concepto.value = ''; f.elements.importe.value = ''; f.elements.categoria.value = '';
+  f.elements.fecha.value = TODAY;
+  setChecked(f, 'tipo', 'medias'); setChecked(f, 'debe', 'medias');
+  if (ui.me) setChecked(f, 'pagador', ui.me);
+  ui.cuEdit = null;
+  $('#cu-form-title').textContent = 'Añadir gasto o pago';
+  $('#cu-submit').textContent = 'Añadir';
+  $('#cu-cancel').hidden = true;
+  $('#cu-err').textContent = '';
+  cuentaHelp();
+}
+
+
+/* ---------- Fichas: día, lista del mes y resumen de cuentas ---------- */
+function abrirFicha(id){
+  ['dia','lista','resumen'].forEach(function(x){ $('#' + x).hidden = (x !== id); });
+  document.body.classList.add('bloqueada');
+}
+function cerrarFichas(){
+  ['dia','lista','resumen'].forEach(function(x){ $('#' + x).hidden = true; });
+  ui.diaKey = null; ui.listaMes = null; ui.evEdit = null;
+  document.body.classList.remove('bloqueada');
+}
+function fechaLarga(k){ var d = parseKey(k); return DIAS[wdIndex(d)] + ' ' + d.getDate() + ' de ' + MESES[d.getMonth()].toLowerCase(); }
+function evLinea(e){ return (HIJOS[e.hijo] || 'Los dos') + (e.lugar ? ' · ' + esc(e.lugar) : ''); }
+function abrirDia(k){
+  ui.diaKey = k;
+  resetEvForm();
+  renderDia();
+  abrirFicha('dia');
+}
+function renderDia(){
+  var k = ui.diaKey; if (!k) return;
+  var editando = ui.editCal && ui.calSub === 'cosas';
+  var w = ownerOf(k, docs('cal'));
+  $('#dia-t').textContent = fechaLarga(k) + (k.slice(0, 4) !== String(today.getFullYear()) ? ' ' + k.slice(0, 4) : '');
+  $('#dia-who').innerHTML = '<i class="dot ' + (w || '') + '"></i>' + (w ? 'Están con <b>' + P[w] + '</b>' : 'Sin asignar') + (k === TODAY ? ' · hoy' : '');
+  var evs = evDe(k);
+  $('#dia-evs').innerHTML = evs.length ? evs.map(function(e){
+    return '<div class="evitem"><span class="t">' + (hhmm(e.hora) || 'Todo el día') + '</span><div><b>' + esc(e.titulo) + '</b><div class="x">' + evLinea(e) + '</div></div>' +
+      (editando ? '<div class="tools"><button type="button" class="link-btn" data-ev-edit="' + esc(e.id) + '">Editar</button></div>' : '<span></span>') + '</div>';
+  }).join('') : '<p class="free">No hay nada apuntado este día.</p>';
+  $('#ev-form').hidden = !editando;
+  $('#dia-a-editar').hidden = editando;
+}
+function abrirLista(mid){ ui.listaMes = mid; renderLista(); abrirFicha('lista'); }
+function renderLista(){
+  var mid = ui.listaMes; if (!mid) return;
+  $('#lista-t').textContent = MESES[+mid.slice(5) - 1] + ' ' + mid.slice(0, 4);
+  var evs = evList().filter(function(e){ return e.fecha.slice(0, 7) === mid; }), cal = docs('cal');
+  if (!evs.length){ $('#lista-body').innerHTML = '<p class="free">No hay nada apuntado este mes. Para añadir algo, pulsa «Editar» y luego «Cosas de cada día».</p>'; return; }
+  var out = '', cur = '';
+  evs.forEach(function(e){
+    if (e.fecha !== cur){
+      cur = e.fecha;
+      var w = ownerOf(cur, cal);
+      out += '<div class="evday"><i class="dot ' + (w || '') + '"></i>' + fechaLarga(cur) + ' · ' + cuantoFalta(cur) + '</div>';
+    }
+    out += '<div class="evitem link" data-ir-dia="' + e.fecha + '"><span class="t">' + (hhmm(e.hora) || 'Todo el día') + '</span><div><b>' + esc(e.titulo) + '</b><div class="x">' + evLinea(e) + '</div></div><span></span></div>';
+  });
+  $('#lista-body').innerHTML = out;
+}
+function textoResumen(){
+  var y = Math.floor(ui.resMes / 12), m = ui.resMes % 12, mid = y + '-' + pad(m + 1);
+  var list = cuentasList().filter(function(c){ return String(c.fecha || '').slice(0, 7) === mid; })
+    .sort(function(a, b){ return String(a.fecha).localeCompare(String(b.fecha)); });
+  var t = '*Cuentas de ' + MESES[m].toLowerCase() + ' ' + y + '*\n';
+  if (!list.length) return t + '\nNo hay movimientos este mes.';
+  var tot = 0, pp = 0, pm = 0;
+  t += '\n';
+  list.forEach(function(c){
+    if (c.tipo === 'devolucion'){ t += '• ' + dShort(c.fecha) + ' · ' + P[c.pagador] + ' le devolvió ' + eur(+c.importe) + ' a ' + KIDS[c.hijo] + '\n'; return; }
+    t += '• ' + dShort(c.fecha) + ' · ' + (c.concepto || 'Sin concepto') + (CATS[c.categoria] ? ' (' + CATS[c.categoria] + ')' : '') +
+      ': ' + eur(+c.importe) + ' · pagó ' + nombre(c.pagador) + ', ' + textoTipo(c) + '\n';
+    if (esGasto(c)){ tot += +c.importe; if (c.pagador === 'papa') pp += +c.importe; else if (c.pagador === 'mama') pm += +c.importe; }
+  });
+  t += '\nGastos del mes: ' + eur(tot) + '\nPagó Papá: ' + eur(pp) + ' · Pagó Mamá: ' + eur(pm) + '\n';
+  var bm = balanceOf(list);
+  t += 'Este mes: ' + (Math.abs(bm) < 0.005 ? 'quedáis en paz' : P[bm > 0 ? 'mama' : 'papa'] + ' debe ' + eur(Math.abs(bm)) + ' a ' + P[bm > 0 ? 'papa' : 'mama']) + '\n';
+  var bt = balanceOf(cuentasList());
+  t += 'En total, hoy: ' + (Math.abs(bt) < 0.005 ? 'estáis en paz' : P[bt > 0 ? 'mama' : 'papa'] + ' debe ' + eur(Math.abs(bt)) + ' a ' + P[bt > 0 ? 'papa' : 'mama']);
+  var lh = lineasHijos(cuentasList());
+  if (lh.length) t += '\n\nCon Pablo y Álvaro:\n' + lh.map(function(x){ return '• ' + P[x.padre] + ' debe ' + eur(x.imp) + ' a ' + KIDS[x.hijo]; }).join('\n');
+  return t;
+}
+function renderResumen(){
+  var y = Math.floor(ui.resMes / 12), m = ui.resMes % 12;
+  $('#res-mes').textContent = MESES[m] + ' ' + y;
+  var t = textoResumen();
+  $('#res-txt').textContent = t;
+  $('#res-wa').href = 'https://wa.me/?text=' + encodeURIComponent(t);
+}
+function copiar(t){
+  if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(t);
+  return new Promise(function(ok, ko){
+    var ta = document.createElement('textarea'); ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy') ? ok() : ko(); } catch(e){ ko(e); } finally { ta.remove(); }
+  });
+}
+
+/* ---------- Peticiones de cambio de día ---------- */
+function cambiosList(){
+  var all = docs('cambios');
+  return Object.keys(all).map(function(id){ return Object.assign({id:id}, all[id]); })
+    .filter(function(c){ return isKey(c.desde) && who(c.para) && who(c.de); })
+    .sort(function(a, b){ return String(b.creado || '').localeCompare(String(a.creado || '')); });
+}
+function diasDe(c){
+  var z = isKey(c.hasta) && c.hasta >= c.desde ? c.hasta : c.desde, out = [];
+  for (var d = parseKey(c.desde), i = 0; ymd(d) <= z && i < 62; d = addDays(d, 1), i++) out.push(ymd(d));
+  return out;
+}
+function rangoTexto(c){
+  var z = isKey(c.hasta) && c.hasta > c.desde ? c.hasta : null;
+  var d = parseKey(c.desde);
+  return z ? 'del ' + dShort(c.desde) + ' al ' + dShort(z) : 'el ' + DIAS[wdIndex(d)].toLowerCase() + ' ' + dShort(c.desde);
+}
+function renderCambios(){
+  var list = cambiosList();
+  var pend = list.filter(function(c){ return c.estado === 'pendiente'; });
+  var hechos = list.filter(function(c){ return c.estado !== 'pendiente'; }).slice(0, 3);
+  var mias = pend.filter(function(c){ return !ui.me || c.de !== ui.me; }).length;
+  var badge = $('#cal-badge'); badge.textContent = mias; badge.hidden = !mias;
+  var h = pend.map(function(c){
+    var otro = OTHER[c.de], acciones;
+    if (ui.me === otro) acciones = '<div class="actions"><button type="button" class="btn sm" data-cb-ok="' + esc(c.id) + '">Aceptar</button><button type="button" class="btn ghost sm" data-cb-no="' + esc(c.id) + '">Rechazar</button></div>';
+    else if (ui.me === c.de) acciones = '<div class="actions"><span class="muted">Esperando a ' + P[otro] + '.</span><button type="button" class="link-btn" data-del="cambios" data-id="' + esc(c.id) + '">Cancelar petición</button></div>';
+    else acciones = '<p>Tiene que responder ' + P[otro] + '.</p>';
+    return '<div class="req-card"><div class="req-t"><i class="dot ' + c.de + '"></i><span><b>' + P[c.de] + '</b> pide que ' + rangoTexto(c) + (diasDe(c).length > 1 ? ' estén' : ' estén') + ' con <b>' + P[c.para] + '</b></span></div>' +
+      (c.motivo ? '<p>«' + esc(c.motivo) + '»</p>' : '') + acciones + '</div>';
+  }).join('');
+  h += hechos.map(function(c){
+    return '<p class="req-done"><span>' + (c.estado === 'aceptado' ? 'Aceptado' : 'Rechazado') + ': ' + rangoTexto(c) + ' con ' + P[c.para] + ' (lo pidió ' + P[c.de] + ').</span>' +
+      '<button type="button" class="link-btn" data-del="cambios" data-id="' + esc(c.id) + '">Quitar</button></p>';
+  }).join('');
+  $('#cambios').innerHTML = h;
+}
+
+/* ---------- Resumen de hoy (arriba del calendario) ---------- */
+function renderHoy(){
+  var wd = wdIndex(today);
+  var filas = horItems().filter(function(h){ return h.dia === wd; }).map(function(a){
+    var extra = [];
+    if (a.lugar) extra.push(esc(a.lugar));
+    return {t: hhmm(a.inicio), fin: hhmm(a.fin), color: COLORES[colorDe(a.color)][1], titulo: a.actividad, hijo: a.hijo, extra: extra, ev: false};
+  }).concat(evDe(TODAY).map(function(e){
+    return {t: hhmm(e.hora), fin: '', color: 'var(--ink)', titulo: e.titulo, hijo: e.hijo, extra: e.lugar ? [esc(e.lugar)] : [], ev: true};
+  })).sort(function(a, b){ return a.t.localeCompare(b.t); });
+  var h = '<h3>Hoy, ' + DIAS[wd].toLowerCase() + ' ' + today.getDate() + ' de ' + MESES[today.getMonth()].toLowerCase() + '</h3>';
+  if (filas.length){
+    h += '<ul>' + filas.map(function(a){
+      return '<li' + (a.ev ? ' class="ev"' : '') + '><i class="dot" style="background:' + a.color + '"></i><span class="num">' + (a.t || 'Hoy') + (a.fin ? '–' + a.fin : '') + '</span>' +
+        '<span><b>' + esc(a.titulo) + '</b> · ' + (HIJOS[a.hijo] || 'Los dos') + (a.extra.length ? '<span class="muted"> · ' + a.extra.join(', ') + '</span>' : '') + '</span></li>';
+    }).join('') + '</ul>';
+  } else h += '<p class="free">Sin actividades hoy.</p>';
+  var limite = ymd(addDays(today, 14));
+  var prox = evList().filter(function(e){ return e.fecha > TODAY && e.fecha <= limite; }).slice(0, 4);
+  if (prox.length){
+    h += '<h4>Próximos eventos</h4><ul>' + prox.map(function(e){
+      var d = parseKey(e.fecha);
+      return '<li class="ev"><i class="dot" style="background:var(--ink)"></i><span class="num">' + DIAS_L[wdIndex(d)] + ' ' + d.getDate() + '</span>' +
+        '<span><b>' + esc(e.titulo) + '</b> · ' + (HIJOS[e.hijo] || 'Los dos') + '<span class="muted"> · ' + cuantoFalta(e.fecha) + (hhmm(e.hora) ? ', ' + e.hora : '') + '</span></span></li>';
+    }).join('') + '</ul>';
+  }
+  var links = [];
+  var bal = balanceOf(cuentasList());
+  if (Math.abs(bal) >= 0.005){
+    var deudor = bal > 0 ? 'mama' : 'papa';
+    links.push('<a href="#cuentas">' + P[deudor] + ' debe ' + eur(Math.abs(bal)) + ' a ' + P[OTHER[deudor]] + '</a>');
+  }
+  links.push('<a href="#horario">Ver la semana</a>');
+  h += '<div class="links">' + links.join('') + '</div>';
+  $('#hoy').innerHTML = h;
+}
+
 /* ---------- Render general y navegación ---------- */
 function render(){
   renderHeader();
   renderCal();
   renderCuentas();
-  renderNotas();
   renderHorario();
+  renderCambios();
+  renderHoy();
+  if (!$('#dia').hidden) renderDia();
+  if (!$('#lista').hidden) renderLista();
+  if (!$('#resumen').hidden) renderResumen();
 }
 function route(){
   var h = location.hash.replace('#', '');
@@ -1268,23 +1766,15 @@ function route(){
 }
 function applyMeDefaults(){
   if (!ui.me) return;
-  var cf = $('#cu-form'), nf = $('#no-form');
+  var cf = $('#cu-form');
   if (!checked(cf, 'pagador')) setChecked(cf, 'pagador', ui.me);
-  if (!checked(nf, 'autor')) setChecked(nf, 'autor', ui.me);
+  if (!checked($('#cambio-form'), 'de')) setChecked($('#cambio-form'), 'de', ui.me);
   cuentaHelp();
 }
 
 function bind(){
   window.addEventListener('hashchange', route);
 
-  $$('[data-me]').forEach(function(b){
-    b.addEventListener('click', function(){
-      ui.me = b.dataset.me; lsSet('fam_me', ui.me);
-      setChecked($('#cu-form'), 'pagador', ui.me);
-      setChecked($('#no-form'), 'autor', ui.me);
-      cuentaHelp(); renderHeader();
-    });
-  });
 
   // Calendario
   $('#y-prev').addEventListener('click', function(){ if (ui.start > 2000 * 12){ ui.start -= 12; ui.rangeStart = null; renderCal(); } });
@@ -1294,11 +1784,16 @@ function bind(){
     if (ui.start !== cur){ ui.start = cur; ui.rangeStart = null; renderCal(); }
     scrollToMonth(today.getFullYear(), today.getMonth());
   });
+  $$('[data-cm]').forEach(function(b){ b.addEventListener('click', function(){ ui.editCal = b.dataset.cm === 'editar'; ui.rangeStart = null; renderCal(); actualizarSubir(); }); });
+  $$('[data-cs]').forEach(function(b){ b.addEventListener('click', function(){ ui.calSub = b.dataset.cs; ui.rangeStart = null; renderCal(); actualizarSubir(); }); });
+  $('#cal-done').addEventListener('click', function(){ ui.editCal = false; ui.rangeStart = null; renderCal(); actualizarSubir(); });
   $$('[data-brush]').forEach(function(b){ b.addEventListener('click', function(){ ui.brush = b.dataset.brush; renderCal(); }); });
   $$('[data-mode]').forEach(function(b){ b.addEventListener('click', function(){ ui.mode = b.dataset.mode; ui.rangeStart = null; renderCal(); }); });
   $('#months').addEventListener('click', function(e){
+    var li = e.target.closest('[data-lista]'); if (li){ abrirLista(li.dataset.lista); return; }
     var b = e.target.closest('button[data-k]'); if (!b) return;
     var k = b.dataset.k;
+    if (!ui.editCal || ui.calSub === 'cosas'){ abrirDia(k); return; }
     if (!token){ mostrarLogin(); return; }
     if (ui.mode === 'rango'){
       if (!ui.rangeStart){ ui.rangeStart = k; renderCal(); return; }
@@ -1366,13 +1861,28 @@ function bind(){
     if (!(importe > 0)){ err.textContent = 'Escribe un importe mayor que 0, por ejemplo 25,50.'; cf.elements.importe.focus(); return; }
     if (importe > 1000000){ err.textContent = 'Ese importe es demasiado alto.'; return; }
     if (!pagador){ err.textContent = 'Elige quién pagó.'; return; }
-    if (save('cuentas', newId(), {concepto: concepto.slice(0, 80), importe: importe, fecha: fecha, pagador: pagador, tipo: tipo, creado: new Date().toISOString()})){
-      cf.elements.concepto.value = ''; cf.elements.importe.value = '';
-      cuentaHelp();
-      toast('Movimiento añadido.');
+    var editando = ui.cuEdit, previo = editando ? docs('cuentas')[editando] : null;
+    var esHijo = !!kid(pagador);
+    var reg = {concepto: concepto.slice(0, 80), importe: importe, fecha: fecha, pagador: pagador, tipo: esHijo ? 'hijo' : tipo,
+      debe: esHijo ? (checked(cf, 'debe') || 'medias') : '', hijo: '',
+      categoria: CATS[cf.elements.categoria.value] ? cf.elements.categoria.value : '',
+      creado: previo && previo.creado ? previo.creado : new Date().toISOString()};
+    if (save('cuentas', editando || newId(), reg, editando ? ui.cuVersion : undefined)){
+      resetCuForm();
+      toast(editando ? 'Movimiento actualizado.' : 'Movimiento añadido.');
     }
   });
   $('#cu-balance').addEventListener('click', function(e){
+    var dv = e.target.closest('[data-devolver]');
+    if (dv){
+      var par = dv.dataset.devolver.split(':'), padre = par[0], hijo = par[1];
+      var debe = deudasHijos(cuentasList())[hijo][padre];
+      if (!(debe >= 0.005)) return;
+      if (!armed(dv, 'Confirmar: ' + P[padre] + ' devuelve ' + eur(debe))) return;
+      save('cuentas', newId(), {concepto: 'Devuelto a ' + KIDS[hijo], importe: debe, fecha: TODAY, pagador: padre, tipo: 'devolucion', hijo: hijo, debe: '', creado: new Date().toISOString()});
+      toast('Apuntado: ' + P[padre] + ' le ha devuelto ' + eur(debe) + ' a ' + KIDS[hijo] + '.');
+      return;
+    }
     var b = e.target.closest('#cu-saldar'); if (!b) return;
     var bal = balanceOf(cuentasList());
     if (Math.abs(bal) < 0.005) return;
@@ -1382,25 +1892,122 @@ function bind(){
     toast('Cuentas saldadas.');
   });
 
-  // Notas
-  var nf = $('#no-form');
-  nf.addEventListener('submit', function(e){
+  // Cuentas: categorías y editar un movimiento
+  $('#cu-cat').innerHTML += Object.keys(CATS).map(function(k){ return '<option value="' + k + '">' + CATS[k] + '</option>'; }).join('');
+  $('#cu-list').addEventListener('click', function(e){
+    var b = e.target.closest('[data-cu-edit]'); if (!b) return;
+    var c = docs('cuentas')[b.dataset.cuEdit]; if (!c) return;
+    ui.cuEdit = b.dataset.cuEdit;
+    var conocido = snap.cuentas[ui.cuEdit];
+    ui.cuVersion = conocido && conocido.version ? conocido.version : 0;
+    cf.elements.concepto.value = c.concepto || '';
+    cf.elements.importe.value = String(c.importe).replace('.', ',');
+    cf.elements.fecha.value = isKey(c.fecha) ? c.fecha : TODAY;
+    cf.elements.categoria.value = CATS[c.categoria] ? c.categoria : '';
+    setChecked(cf, 'pagador', c.pagador);
+    if (c.tipo === 'hijo') setChecked(cf, 'debe', c.debe); else setChecked(cf, 'tipo', c.tipo);
+    $('#cu-form-title').textContent = 'Editar movimiento';
+    $('#cu-submit').textContent = 'Guardar cambios';
+    $('#cu-cancel').hidden = false;
+    cuentaHelp();
+    var nav = $('.tabs-bar');
+    window.scrollTo(0, Math.max(0, cf.getBoundingClientRect().top + window.pageYOffset - (nav ? nav.offsetHeight : 0) - 60));
+  });
+  $('#cu-cancel').addEventListener('click', resetCuForm);
+
+  // Cosas de cada día (ficha del día)
+  var ef = $('#ev-form');
+  ef.addEventListener('submit', function(e){
     e.preventDefault();
-    var err = $('#no-err'); err.textContent = '';
-    var texto = nf.elements.texto.value.trim(), autor = checked(nf, 'autor');
-    if (!texto){ err.textContent = 'Escribe algo en la nota.'; nf.elements.texto.focus(); return; }
-    if (!autor){ err.textContent = 'Elige quién escribe la nota.'; return; }
-    if (save('notas', newId(), {texto: texto.slice(0, 2000), autor: autor, creado: new Date().toISOString(), hecha: false})){
-      nf.elements.texto.value = '';
-      if (ui.nf !== 'pend'){ ui.nf = 'pend'; }
-      toast('Nota guardada.');
+    var err = $('#ev-err'); err.textContent = '';
+    var titulo = ef.elements.titulo.value.trim(), fecha = ef.elements.fecha.value;
+    if (!titulo){ err.textContent = 'Escribe qué es, por ejemplo «Dentista».'; ef.elements.titulo.focus(); return; }
+    if (!isKey(fecha)){ err.textContent = 'Pon la fecha.'; return; }
+    var editando = ui.evEdit, previo = editando ? docs('eventos')[editando] : null;
+    var reg = {fecha: fecha, hora: getHora('ev'), titulo: titulo.slice(0, 80), hijo: HIJOS[checked(ef, 'hijo')] ? checked(ef, 'hijo') : 'ambos',
+      lugar: ef.elements.lugar.value.trim().slice(0, 60), creado: previo && previo.creado ? previo.creado : new Date().toISOString()};
+    if (save('eventos', editando || newId(), reg, editando ? ui.evVersion : undefined)){
+      if (fecha !== ui.diaKey) toast((editando ? 'Guardado' : 'Añadido') + ' el ' + fechaLarga(fecha).toLowerCase() + '.');
+      else toast(editando ? 'Cambios guardados.' : 'Añadido.');
+      resetEvForm();
     }
   });
-  $$('[data-nf]').forEach(function(b){ b.addEventListener('click', function(){ ui.nf = b.dataset.nf; renderNotas(); }); });
-  $('#no-list').addEventListener('click', function(e){
-    var b = e.target.closest('[data-hecha]'); if (!b) return;
-    var cur = docs('notas')[b.dataset.hecha]; if (!cur) return;
-    save('notas', b.dataset.hecha, Object.assign({}, cur, {hecha: !cur.hecha}));
+  $('#ev-cancel').addEventListener('click', resetEvForm);
+  $('#ev-del').addEventListener('click', function(){
+    if (!ui.evEdit || !armed($('#ev-del'))) return;
+    save('eventos', ui.evEdit, null);
+    resetEvForm();
+    toast('Borrado.');
+  });
+  $('#dia-evs').addEventListener('click', function(e){
+    var b = e.target.closest('[data-ev-edit]'); if (!b) return;
+    var ev = docs('eventos')[b.dataset.evEdit]; if (!ev) return;
+    resetEvForm();
+    ui.evEdit = b.dataset.evEdit;
+    var conocido = snap.eventos[ui.evEdit];
+    ui.evVersion = conocido && conocido.version ? conocido.version : 0;
+    ef.elements.titulo.value = ev.titulo || '';
+    ef.elements.fecha.value = ev.fecha;
+    setHora('ev', hhmm(ev.hora));
+    setChecked(ef, 'hijo', HIJOS[ev.hijo] ? ev.hijo : 'ambos');
+    ef.elements.lugar.value = ev.lugar || '';
+    $('#ev-form-title').textContent = 'Cambiar «' + (ev.titulo || '') + '»';
+    $('#ev-submit').textContent = 'Guardar cambios';
+    $('#ev-cancel').hidden = false; $('#ev-del').hidden = false;
+    try { ef.elements.titulo.focus(); } catch(x){}
+  });
+  $('#dia-a-editar').addEventListener('click', function(){
+    ui.editCal = true; ui.calSub = 'cosas'; ui.rangeStart = null;
+    renderCal(); renderDia(); actualizarSubir();
+    try { ef.elements.titulo.focus(); } catch(x){}
+  });
+  $('#lista-body').addEventListener('click', function(e){
+    var it = e.target.closest('[data-ir-dia]'); if (it) abrirDia(it.dataset.irDia);
+  });
+  $$('[data-cerrar]').forEach(function(b){ b.addEventListener('click', cerrarFichas); });
+  $$('.sheet').forEach(function(sh){ sh.addEventListener('click', function(e){ if (e.target === sh) cerrarFichas(); }); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') cerrarFichas(); });
+
+  // Resumen de cuentas para WhatsApp
+  $('#cu-resumen').addEventListener('click', function(){ ui.resMes = today.getFullYear() * 12 + today.getMonth(); renderResumen(); abrirFicha('resumen'); });
+  $('#res-prev').addEventListener('click', function(){ ui.resMes--; renderResumen(); });
+  $('#res-next').addEventListener('click', function(){ ui.resMes++; renderResumen(); });
+  $('#res-copiar').addEventListener('click', function(){
+    copiar(textoResumen()).then(function(){ toast('Copiado. Pégalo en WhatsApp.'); }, function(){ toast('No se ha podido copiar. Mantén pulsado el texto para copiarlo.'); });
+  });
+
+  // Peticiones de cambio de día
+  var cbf = $('#cambio-form');
+  cbf.addEventListener('submit', function(e){
+    e.preventDefault();
+    var err = $('#cb-err'); err.textContent = '';
+    var desde = cbf.elements.desde.value, hasta = cbf.elements.hasta.value || desde;
+    var para = checked(cbf, 'para'), de = checked(cbf, 'de');
+    if (!isKey(desde)){ err.textContent = 'Pon el día que quieres cambiar.'; return; }
+    if (!isKey(hasta) || hasta < desde){ err.textContent = 'La fecha «hasta» tiene que ser posterior al día.'; return; }
+    if (Math.round((parseKey(hasta) - parseKey(desde)) / 86400000) > 30){ err.textContent = 'Como mucho 31 días por petición.'; return; }
+    if (!para){ err.textContent = 'Elige con quién estarían esos días.'; return; }
+    if (!de){ err.textContent = 'Elige quién lo pide.'; return; }
+    var reg = {desde: desde, hasta: hasta, para: para, de: de, motivo: cbf.elements.motivo.value.trim().slice(0, 120), estado: 'pendiente', creado: new Date().toISOString()};
+    var cal = docs('cal');
+    if (diasDe(reg).every(function(k){ return ownerOf(k, cal) === para; })){ err.textContent = 'Esos días ya están con ' + P[para] + '.'; return; }
+    if (save('cambios', newId(), reg)){
+      cbf.elements.desde.value = ''; cbf.elements.hasta.value = ''; cbf.elements.motivo.value = '';
+      setChecked(cbf, 'para', null);
+      $('#cambio-tool').open = false;
+      toast('Petición enviada. ' + P[OTHER[de]] + ' la verá al abrir la app.');
+    }
+  });
+  $('#cambios').addEventListener('click', function(e){
+    var ok = e.target.closest('[data-cb-ok]'), no = e.target.closest('[data-cb-no]');
+    var id = ok ? ok.dataset.cbOk : no ? no.dataset.cbNo : null; if (!id) return;
+    var c = docs('cambios')[id]; if (!c || c.estado !== 'pendiente') return;
+    if (ok && !armed(ok, '¿Aceptar? Toca otra vez')) return;
+    if (no && !armed(no, '¿Rechazar? Toca otra vez')) return;
+    var conocido = snap.cambios[id], v = conocido && conocido.version ? conocido.version : 0;
+    if (ok) applyChanges(diasDe(c).map(function(k){ return [k, c.para]; }));
+    save('cambios', id, Object.assign(limpio(c), {estado: ok ? 'aceptado' : 'rechazado'}), v);
+    toast(ok ? 'Cambio aceptado: el calendario ya está actualizado.' : 'Cambio rechazado.');
   });
 
   // Borrar (cuentas y notas), con confirmación
@@ -1431,8 +2038,12 @@ function bind(){
   });
   window.addEventListener('scroll', actualizarSubir, {passive: true});
   window.addEventListener('resize', actualizarSubir);
+  $('#wk-prev').addEventListener('click', function(){ if (ui.week > -26){ ui.week--; renderHorario(); } });
+  $('#wk-next').addEventListener('click', function(){ if (ui.week < 52){ ui.week++; renderHorario(); } });
+  $('#wk-hoy').addEventListener('click', function(){ ui.week = 0; renderHorario(); });
   $$('[data-hf]').forEach(function(b){ b.addEventListener('click', function(){ ui.hf = b.dataset.hf; renderHorario(); }); });
   $('#week').addEventListener('click', function(e){
+    var dd = e.target.closest('[data-ir-dia]'); if (dd){ abrirDia(dd.dataset.irDia); return; }
     var ed = e.target.closest('[data-edit]');
     if (ed){ var item = horItems().filter(function(h){ return h.id === ed.dataset.edit; })[0]; if (item) openHorForm({item: item}); return; }
     var ad = e.target.closest('[data-addday]');
@@ -1461,7 +2072,7 @@ function bind(){
     if (!inicio){ err.textContent = 'Pon la hora de inicio.'; return; }
     if (fin && fin <= inicio){ err.textContent = 'La hora de fin tiene que ser posterior a la de inicio.'; return; }
     var base = {hijo: hijo, actividad: actividad.slice(0, 60), lugar: hf.elements.lugar.value.trim().slice(0, 60), inicio: inicio, fin: fin,
-      lleva: who(hf.elements.lleva.value) || '', recoge: who(hf.elements.recoge.value) || '', color: colorDe(checked(hf, 'color'))};
+      lleva: '', recoge: '', color: colorDe(checked(hf, 'color'))};
     var editing = ui.editId, editVersion = ui.editVersion || 0, okAll = true;
     // Mismo color para todas las actividades con el mismo nombre (p. ej. todo el «Fútbol» en gris)
     var nombre = base.actividad.toLowerCase();
@@ -1492,6 +2103,7 @@ function bind(){
 function bindAcceso(){
   var lf = $('#login-form');
   var ultimo = lsGet('fam_quien');
+  if (ultimo === 'pablo') ultimo = 'hijos'; // antes el usuario de los hijos se llamaba «Pablo»
   if (ultimo) setChecked(lf, 'quien', ultimo);
   $('#lg-ver').addEventListener('click', function(){
     var p = $('#lg-pass'), ver = p.type === 'password';
@@ -1512,7 +2124,7 @@ function bindAcceso(){
       if (j && j.ok && /^[a-f0-9]{64}$/.test(j.token || '')){
         token = j.token; rev = null;
         lsSet('fam_token', token); lsSet('fam_quien', quien);
-        if ((quien === 'papa' || quien === 'mama') && !ui.me){ ui.me = quien; lsSet('fam_me', quien); applyMeDefaults(); }
+        ui.me = who(quien); lsSet('fam_me', ui.me || ''); applyMeDefaults(); render();
         $('#lg-pass').value = '';
         ocultarLogin();
         conectado = true; setStatus('Conectando…');
@@ -1546,8 +2158,21 @@ function bindAcceso(){
   });
 }
 
+
+/* ---------- Tamaño de letra: pequeña (la de siempre), mediana y grande ----------
+   Se agranda toda la app por igual, así nada se descoloca. */
+var LETRA = {1: 1, 2: 1.12, 3: 1.25};
+function ponerLetra(n){
+  n = LETRA[n] ? +n : 1;
+  document.documentElement.style.zoom = LETRA[n] === 1 ? '' : String(LETRA[n]);
+  $$('[data-letra]').forEach(function(b){ b.setAttribute('aria-pressed', String(+b.dataset.letra === n)); });
+  lsSet('fam_letra', String(n));
+}
+
 /* ---------- Arranque ---------- */
 function init(){
+  ponerLetra(lsGet('fam_letra'));
+  $$('[data-letra]').forEach(function(b){ b.addEventListener('click', function(){ ponerLetra(b.dataset.letra); actualizarSubir(); }); });
   bind();
   bindAcceso();
   route();
